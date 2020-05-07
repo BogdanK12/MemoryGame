@@ -19,7 +19,10 @@ const openCardImage = [
 	'white url("images/image11.png") no-repeat',
 	'white url("images/image12.png") no-repeat',
 ];     
-const cards = document.querySelector('.cards');           
+const cards = document.querySelector('.cards');  
+let firstOpen;
+let secondOpen;         
+let openCardsName;
 //const card1 = document.querySelector('#2');                       
 //const card1 = document.querySelector('#3');
 //const card1 = document.querySelector('#4');
@@ -46,25 +49,50 @@ buttonRestart.addEventListener('click', function () {
 	sectionGreeting.style.display = 'none';                              
 	sectionGameField.style.display = 'block';                       
 	                                           
-});                                                 
+}); 
+
+let compareCheckCards = function(firstOpen, secondOpen){
+	if(openCardsName.length === 2 && openCardsName[0] === openCardsName[1]){
+		firstOpen.classList.add('disappereans');
+		secondOpen.classList.add('disappereans');
+		firstOpen = 0;
+		openCardsName = [];
+	}
+	else if(openCardsName.length === 2 && openCardsName[0] !== openCardsName[1]){
+		setTimeout(function(){
+		firstOpen.removeAttribute("style");
+		secondOpen.removeAttribute("style");}, 1000)
+	}
+};
+                                                
 let displayCard = function(e) {             
 	if (e.target.tagName !== "LI") return;                                       
 	e.target.style.background = openCardImage[e.target.id];
 	e.target.style.backgroundSize = 'cover';
 	e.target.classList.add('rotation-effect');
-	
+	openCardsName.push(e.target.getAttribute("id")); console.log(openCardsName);
+	if(! firstOpen){
+	firstOpen = e.target;
+	console.log(firstOpen);
+	}
+	else{
+	secondOpen = e.target;
+	console.log(secondOpen);
+	};
+	compareCheckCards(firstOpen, secondOpen);
 };
 cards.addEventListener('click', displayCard);   
                    
 let start = function (){                                    
 	cards.innerHTML = '';
+	openCardsName = [];
 	let arrayId = fillArray();
 	for (let i = 0; i < 12; i++) {                                      
 	const card = document.createElement('li');                                
 	card.classList.add('card','shirt-color-1');                                   
 	card.setAttribute('id', arrayId[i]);                                            
 	cards.appendChild(card);}
-	
+		
 };
 
 buttonPlay.addEventListener('click', start);
